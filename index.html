@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Геогессер</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.css" rel="stylesheet" />
+    
+    <script src="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif; overflow: hidden; }
+        
+        #pano-container { height: 100vh; width: 100%; background: #111; position: relative; }
+
+        /* --- ГЛАВНОЕ МЕНЮ --- */
+        #main-menu {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            z-index: 3000; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; color: white;
+        }
+        #main-menu h1 { font-size: 60px; margin-bottom: 40px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+        .menu-btn {
+            font-size: 24px; padding: 15px 40px; margin: 10px; border: none;
+            border-radius: 10px; width: 300px; cursor: pointer; font-weight: bold;
+            transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); color: white;
+        }
+        #start-game-btn { background-color: #4CAF50; }
+        #start-game-btn:hover { background-color: #45a049; transform: scale(1.05); }
+        #settings-btn { background-color: #607D8B; }
+        #settings-btn:hover { background-color: #455A64; transform: scale(1.05); }
+
+        /* --- ТАЙМЕР --- */
+        #timer-display {
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.8); color: white; font-size: 32px; font-weight: bold;
+            padding: 10px 30px; border-radius: 10px; z-index: 1000; border: 2px solid white;
+            display: none; /* Скрыт в меню */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: color 0.3s;
+        }
+
+        /* --- ИГРОВОЙ ИНТЕРФЕЙС --- */
+        .controls { position: absolute; bottom: 20px; right: 20px; z-index: 1000; display: flex; gap: 10px; }
+        button.game-btn { padding: 10px 20px; font-size: 16px; cursor: pointer; color: white; border: none; border-radius: 5px; font-weight: bold; transition: 0.2s; }
+        #toggle-map-btn { background-color: #2196F3; }
+        #toggle-map-btn:hover { background-color: #1976D2; }
+        #guess-btn { background-color: #4CAF50; font-size: 18px; padding: 12px 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        #guess-btn:hover { background-color: #45a049; transform: scale(1.05); }
+
+        #map-container { 
+            position: absolute; bottom: 80px; right: 20px; width: 350px; height: 250px; 
+            background: #eee; z-index: 1000; border: 3px solid white; border-radius: 8px; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        #result-overlay {
+            display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(30, 30, 30, 0.95);
+            color: white; padding: 40px; border-radius: 15px; text-align: center; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            border: 2px solid #555; min-width: 300px;
+        }
+        #result-title { margin-top: 0; color: #4CAF50; font-size: 28px; }
+        .score-text { font-size: 48px; font-weight: bold; margin: 20px 0; color: #FFF; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .distance-text { font-size: 20px; color: #FF9800; margin-bottom: 30px; }
+        #next-btn { background-color: #FF9800; width: 100%; font-size: 18px; padding: 15px; border: none; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        #next-btn:hover { background-color: #F57C00; }
+    </style>
+</head>
+<body>
+
+    <div id="main-menu">
+        <h1>🌍 Мой Геогессер</h1>
+        <button id="start-game-btn" class="menu-btn">▶️ Играть</button>
+        <button id="settings-btn" class="menu-btn">⚙️ Настройки</button>
+    </div>
+
+    <div id="timer-display">02:00</div>
+
+    <div id="pano-container">
+        <div class="controls">
+            <button id="toggle-map-btn" class="game-btn">🗺️ Карта</button>
+            <button id="guess-btn" class="game-btn">Угадать!</button>
+        </div>
+        
+        <div id="map-container"></div>
+
+        <div id="result-overlay">
+            <h2 id="result-title">Результат</h2>
+            <div class="distance-text" id="result-distance">Расстояние: 0 км</div>
+            <div class="score-text" id="result-score">0</div>
+            <p style="margin-top:-15px; margin-bottom: 25px; color: #aaa;">очков из 5000</p>
+            <button id="next-btn">Следующий раунд ➡️</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+    
+</body>
+</html>
