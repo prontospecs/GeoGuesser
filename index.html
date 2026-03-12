@@ -21,28 +21,34 @@
             z-index: 3000; display: flex; flex-direction: column;
             align-items: center; justify-content: center; color: white;
         }
-        #main-menu h1 { font-size: 60px; margin-bottom: 40px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+        #main-menu h1 { font-size: 60px; margin-bottom: 40px; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); text-align: center; }
         .menu-btn {
             font-size: 24px; padding: 15px 40px; margin: 10px; border: none;
             border-radius: 10px; width: 300px; cursor: pointer; font-weight: bold;
             transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); color: white;
         }
+        #records-btn { background-color: #9C27B0; }
+        #records-btn:hover { background-color: #7B1FA2; transform: scale(1.05); }
         #start-game-btn { background-color: #4CAF50; }
         #start-game-btn:hover { background-color: #45a049; transform: scale(1.05); }
         #settings-btn { background-color: #607D8B; }
         #settings-btn:hover { background-color: #455A64; transform: scale(1.05); }
+        #tutorial-btn { background-color: #00BCD4; }
+        #tutorial-btn:hover { background-color: #0097A7; transform: scale(1.05); }
 
+        /* ИГРОВАЯ ИНФОРМАЦИЯ */
         #game-info {
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 20px; z-index: 1000; display: none; 
+            position: absolute; top: 20px; left: 20px; 
+            display: flex; flex-direction: column; gap: 10px; z-index: 1000; display: none; 
         }
         .info-box {
-            background: rgba(0,0,0,0.8); color: white; font-size: 24px; font-weight: bold;
-            padding: 10px 20px; border-radius: 10px; border: 2px solid white;
+            background: rgba(0,0,0,0.8); color: white; font-size: 20px; font-weight: bold;
+            padding: 10px 15px; border-radius: 10px; border: 2px solid white;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5); text-align: center;
         }
         #timer-display { transition: color 0.3s; min-width: 80px; }
 
+        /* ИГРОВОЙ ИНТЕРФЕЙС */
         .controls { position: absolute; bottom: 20px; right: 20px; z-index: 1000; display: flex; gap: 10px; }
         button.game-btn { padding: 10px 20px; font-size: 16px; cursor: pointer; color: white; border: none; border-radius: 5px; font-weight: bold; transition: 0.2s; }
         #toggle-map-btn { background-color: #2196F3; }
@@ -55,35 +61,79 @@
             background: #eee; z-index: 1000; border: 3px solid white; border-radius: 8px; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
+        /* ОКНА И МОДАЛКИ */
         .overlay-card {
             display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(30, 30, 30, 0.95);
-            color: white; padding: 40px; border-radius: 15px; text-align: center; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-            border: 2px solid #555; min-width: 350px;
+            color: white; padding: 40px; border-radius: 15px; text-align: center; z-index: 4000; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            border: 2px solid #555; min-width: 350px; max-height: 90vh; overflow-y: auto;
         }
         .result-title { margin-top: 0; font-size: 28px; }
         .score-text { font-size: 48px; font-weight: bold; margin: 10px 0; color: #FFF; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
         .distance-text { font-size: 20px; color: #FF9800; margin-bottom: 20px; }
-        .action-btn { background-color: #FF9800; width: 100%; font-size: 18px; padding: 15px; border: none; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 15px; }
-        .action-btn:hover { background-color: #F57C00; }
+        .action-btn { width: 100%; font-size: 18px; padding: 15px; border: none; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 15px; transition: 0.2s;}
         
-        #home-btn { background-color: #2196F3; }
-        #home-btn:hover { background-color: #1976D2; }
-
         .settings-label { display: block; text-align: left; margin-top: 20px; font-size: 18px; color: #aaa; }
-        .settings-select { width: 100%; padding: 12px; margin-top: 8px; font-size: 16px; background: #333; color: white; border: 1px solid #555; border-radius: 5px; cursor: pointer; }
+        .settings-select { width: 100%; padding: 12px; margin-top: 8px; font-size: 16px; background: #333; color: white; border: 1px solid #555; border-radius: 5px; }
+
+        .close-btn { background-color: #F44336; }
+        .close-btn:hover { background-color: #D32F2F; }
+
+        /* --- АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ --- */
+        @media (max-width: 600px) {
+            #main-menu h1 { font-size: 40px; }
+            .menu-btn { width: 85%; font-size: 20px; padding: 12px; }
+            
+            #game-info { flex-direction: row; flex-wrap: wrap; left: 10px; top: 10px; right: 10px; justify-content: center;}
+            .info-box { font-size: 14px; padding: 5px 10px; }
+            
+            .controls { right: 10px; bottom: 10px; left: 10px; justify-content: space-between; }
+            button.game-btn { font-size: 14px; padding: 10px; flex-grow: 1; text-align: center; }
+            #guess-btn { font-size: 16px; }
+
+            /* Карта на телефоне по центру внизу */
+            #map-container { 
+                width: 90%; right: 5%; left: 5%; height: 200px; bottom: 70px; 
+            }
+
+            .overlay-card { width: 85%; min-width: unset; padding: 25px 15px; }
+            .score-text { font-size: 36px; }
+            .result-title { font-size: 22px; }
+        }
     </style>
 </head>
 <body>
 
     <div id="main-menu">
         <h1>🌍 TimaGuesser</h1>
+        <button id="records-btn" class="menu-btn">🏆 Рекорды</button>
         <button id="start-game-btn" class="menu-btn">▶️ Играть</button>
         <button id="settings-btn" class="menu-btn">⚙️ Настройки</button>
+        <button id="tutorial-btn" class="menu-btn">📖 Как играть</button>
     </div>
 
-    <div id="settings-overlay" class="overlay-card" style="z-index: 4000;">
+    <div id="records-overlay" class="overlay-card">
+        <h2 class="result-title" style="color: #9C27B0;">🏆 Твои Рекорды</h2>
+        <label class="settings-label" style="text-align: center;">Лучший счет за игру (5 раундов):</label>
+        <div class="score-text" id="best-total-score">0</div>
+        <label class="settings-label" style="text-align: center; margin-top: 30px;">Лучший бросок (1 раунд):</label>
+        <div class="score-text" id="best-round-score" style="color: #FF9800;">0</div>
+        <button class="action-btn close-btn" onclick="closeModal('records-overlay')">❌ Закрыть</button>
+    </div>
+
+    <div id="tutorial-overlay" class="overlay-card" style="text-align: left;">
+        <h2 class="result-title" style="color: #00BCD4; text-align: center;">📖 Как играть?</h2>
+        <p style="color: #ddd; font-size: 16px; line-height: 1.5;">
+            <b>Цель игры:</b> Угадать, в какой точке мира ты находишься.<br><br>
+            1. Исследуй панораму: крути камеру, ищи подсказки (язык на вывесках, номера машин, архитектура, природа).<br>
+            2. Открой <b>Карту</b> и поставь метку там, где по-твоему сделано фото.<br>
+            3. Нажми <b>Угадать!</b> Чем ближе твоя метка к реальному месту, тем больше очков ты получишь (максимум 5000 за раунд).<br>
+            4. Игра состоит из 5 раундов. Постарайся набрать 25 000 очков!
+        </p>
+        <button class="action-btn close-btn" onclick="closeModal('tutorial-overlay')">❌ Понятно!</button>
+    </div>
+
+    <div id="settings-overlay" class="overlay-card">
         <h2 class="result-title">⚙️ Настройки</h2>
-        
         <label class="settings-label">Регион поиска:</label>
         <select id="region-select" class="settings-select">
             <option value="all">🌍 Весь мир</option>
@@ -94,7 +144,6 @@
             <option value="africa">🦁 Только Африка</option>
             <option value="oceania">🦘 Только Австралия и Океания</option>
         </select>
-        
         <label class="settings-label">Время на раунд:</label>
         <select id="timer-select" class="settings-select">
             <option value="30">30 секунд (Хардкор)</option>
@@ -103,8 +152,7 @@
             <option value="300">5 минут</option>
             <option value="0">Без времени (Релакс)</option>
         </select>
-
-        <button id="save-settings-btn" class="action-btn" style="background-color: #4CAF50; margin-top: 30px;">💾 Сохранить и закрыть</button>
+        <button id="save-settings-btn" class="action-btn" style="background-color: #4CAF50; margin-top: 30px;">💾 Сохранить</button>
     </div>
 
     <div id="game-info">
@@ -125,7 +173,7 @@
             <div class="distance-text" id="result-distance">Расстояние: 0 км</div>
             <div class="score-text" id="result-score">+0</div>
             <p style="margin-top:-5px; margin-bottom: 10px; color: #aaa;">очков получено</p>
-            <button id="next-btn" class="action-btn">Следующий раунд ➡️</button>
+            <button id="next-btn" class="action-btn" style="background-color: #FF9800;">Следующий раунд ➡️</button>
         </div>
 
         <div id="final-overlay" class="overlay-card">
@@ -133,8 +181,9 @@
             <p style="font-size: 20px; color: #aaa; margin-bottom: 5px;">Твой итоговый счет:</p>
             <div class="score-text" id="final-score">0</div>
             <p style="margin-top:-5px; margin-bottom: 25px; color: #aaa;">из 25000 возможных</p>
-            <button id="play-again-btn" class="action-btn">🔄 Сыграть еще раз</button>
-            <button id="home-btn" class="action-btn">🏠 В главное меню</button>
+            <p id="new-record-msg" style="color: #FFEB3B; font-weight: bold; display: none;">🔥 НОВЫЙ РЕКОРД! 🔥</p>
+            <button id="play-again-btn" class="action-btn" style="background-color: #FF9800;">🔄 Сыграть еще раз</button>
+            <button id="home-btn" class="action-btn" style="background-color: #2196F3;">🏠 В главное меню</button>
         </div>
     </div>
 
@@ -143,3 +192,4 @@
     
 </body>
 </html>
+
