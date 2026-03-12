@@ -69,7 +69,6 @@
         #home-btn { background-color: #2196F3; }
         #home-btn:hover { background-color: #1976D2; }
 
-        /* СТИЛИ ДЛЯ ИНПУТОВ НАСТРОЕК */
         .settings-label { display: block; text-align: left; margin-top: 20px; font-size: 18px; color: #aaa; }
         .settings-select { width: 100%; padding: 12px; margin-top: 8px; font-size: 16px; background: #333; color: white; border: 1px solid #555; border-radius: 5px; cursor: pointer; }
     </style>
@@ -88,10 +87,12 @@
         <label class="settings-label">Регион поиска:</label>
         <select id="region-select" class="settings-select">
             <option value="all">🌍 Весь мир</option>
-            <option value="europe">🏰 Европа и СНГ</option>
-            <option value="asia">🏮 Азия и Ближний Восток</option>
-            <option value="americas">🌎 Америка (Северная и Южная)</option>
-            <option value="africa">🦁 Африка и Океания</option>
+            <option value="europe">🏰 Только Европа</option>
+            <option value="asia">🏮 Только Азия</option>
+            <option value="north_america">🗽 Только Северная Америка</option>
+            <option value="south_america">🌴 Только Южная Америка</option>
+            <option value="africa">🦁 Только Африка</option>
+            <option value="oceania">🦘 Только Австралия и Океания</option>
         </select>
         
         <label class="settings-label">Время на раунд:</label>
