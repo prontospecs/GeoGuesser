@@ -165,22 +165,33 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 document.getElementById('guess-btn').addEventListener('click', async function() {
     if (playerMarker === null) { alert("Сначала открой карту и поставь метку!"); return; }
 
-    stopTimer(); // Останавливаем таймер!
+    stopTimer();
 
     const currentImage = await viewer.getImage();
-    const realLat = currentImage.lngLat.lat; const realLng = currentImage.lngLat.lng;
-    const playerLat = playerMarker.getLatLng().lat; const playerLng = playerMarker.getLatLng().lng;
+    const realLat = currentImage.lngLat.lat; 
+    const realLng = currentImage.lngLat.lng;
+    
+    // --- ВАЖНОЕ ИСПРАВЛЕНИЕ: МЕТОД .wrap() ---
+    // Скручиваем координаты обратно в рамки одной планеты,
+    // чтобы не было красных линий через весь мир!
+    const playerLatLng = playerMarker.getLatLng().wrap();
+    const playerLat = playerLatLng.lat; 
+    const playerLng = playerLatLng.lng;
 
     const distance = Math.round(calculateDistance(realLat, realLng, playerLat, playerLng));
     let score = 5000 * Math.pow(0.998, distance); 
     score = distance < 0.1 ? 5000 : Math.max(0, Math.round(score));
+
+    // ДОБАВЛЯЕМ ОЧКИ В ОБЩИЙ СЧЕТ
+    totalScore += score;
+    updateGameInfoUI();
 
     answerMarker = L.marker([realLat, realLng]).addTo(map).bindPopup("Правильный ответ").openPopup();
     answerLine = L.polyline([[playerLat, playerLng], [realLat, realLng]], {color: 'red', weight: 4}).addTo(map);
     map.fitBounds([[playerLat, playerLng], [realLat, realLng]], { padding: [30, 30] });
     
     document.getElementById('result-distance').innerText = `Отклонение: ${distance} км`;
-    document.getElementById('result-score').innerText = score;
+    document.getElementById('result-score').innerText = `+${score}`;
 
     const titleElement = document.getElementById('result-title');
     if (distance <= 300) { titleElement.innerText = "Идеальное попадание! 🎯"; titleElement.style.color = "#4CAF50"; confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } }); } 
@@ -188,6 +199,17 @@ document.getElementById('guess-btn').addEventListener('click', async function() 
     else { titleElement.innerText = "Упс... Мимо 🌍"; titleElement.style.color = "#F44336"; }
 
     this.style.display = 'none';
+    
+    // ПРОВЕРЯЕМ: Если это был последний раунд, меняем текст кнопки
+    const nextBtn = document.getElementById('next-btn');
+    if (currentRound >= MAX_ROUNDS) {
+        nextBtn.innerText = "Посмотреть итоги игры 🏆";
+        nextBtn.style.backgroundColor = "#4CAF50"; 
+    } else {
+        nextBtn.innerText = "Следующий раунд ➡️";
+        nextBtn.style.backgroundColor = "#FF9800"; 
+    }
+
     document.getElementById('result-overlay').style.display = 'block';
 });
 
@@ -212,4 +234,5 @@ document.getElementById('next-btn').addEventListener('click', async function() {
 });
 
 // --- 7. АНТИ-ЧИТ ---
+
 document.addEventListener('contextmenu', e => e.preventDefault());
