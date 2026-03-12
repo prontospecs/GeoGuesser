@@ -1,8 +1,8 @@
-// --- 1. НАШ КЛЮЧ MAPILLARY И РАСШИРЕННАЯ БАЗА ГОРОДОВ ---
+// --- 1. НАШ КЛЮЧ MAPILLARY И БАЗА ГОРОДОВ ---
 const myAccessToken = 'MLY|26266369579645993|cf11c635af876bc5f1a671e0f6401897';
 
 const CITIES = [
-    // 🏰 ЕВРОПА (Только Европа и часть СНГ)
+    // 🏰 ЕВРОПА
     { name: "Лондон", lat: 51.5074, lon: -0.1278, region: "europe" }, { name: "Париж", lat: 48.8566, lon: 2.3522, region: "europe" },
     { name: "Рим", lat: 41.9028, lon: 12.4964, region: "europe" }, { name: "Берлин", lat: 52.5200, lon: 13.4050, region: "europe" },
     { name: "Мадрид", lat: 40.4168, lon: -3.7038, region: "europe" }, { name: "Амстердам", lat: 52.3676, lon: 4.9041, region: "europe" },
@@ -17,7 +17,7 @@ const CITIES = [
     { name: "Хельсинки", lat: 60.1695, lon: 24.9354, region: "europe" }, { name: "Дублин", lat: 53.3498, lon: -6.2603, region: "europe" },
     { name: "Лиссабон", lat: 38.7223, lon: -9.1393, region: "europe" },
 
-    // 🏮 АЗИЯ (Азия, Ближний Восток, часть СНГ)
+    // 🏮 АЗИЯ
     { name: "Токио", lat: 35.6762, lon: 139.6503, region: "asia" }, { name: "Осака", lat: 34.6937, lon: 135.5023, region: "asia" },
     { name: "Сеул", lat: 37.5665, lon: 126.9780, region: "asia" }, { name: "Сингапур", lat: 1.3521, lon: 103.8198, region: "asia" },
     { name: "Гонконг", lat: 22.3193, lon: 114.1694, region: "asia" }, { name: "Бангкок", lat: 13.7563, lon: 100.5018, region: "asia" },
@@ -39,17 +39,12 @@ const CITIES = [
     { name: "Ванкувер", lat: 49.2827, lon: -123.1207, region: "north_america" }, { name: "Монреаль", lat: 45.5017, lon: -73.5673, region: "north_america" },
     { name: "Майами", lat: 25.7617, lon: -80.1918, region: "north_america" }, { name: "Хьюстон", lat: 29.7604, lon: -95.3698, region: "north_america" },
     { name: "Бостон", lat: 42.3601, lon: -71.0589, region: "north_america" }, { name: "Гвадалахара", lat: 20.6597, lon: -103.3496, region: "north_america" },
-    { name: "Даллас", lat: 32.7767, lon: -96.7970, region: "north_america" }, { name: "Атланта", lat: 33.7490, lon: -84.3880, region: "north_america" },
-    { name: "Денвер", lat: 39.7392, lon: -104.9903, region: "north_america" }, { name: "Монтеррей", lat: 25.6866, lon: -100.3161, region: "north_america" },
 
     // 🌴 ЮЖНАЯ АМЕРИКА
     { name: "Сан-Паулу", lat: -23.5505, lon: -46.6333, region: "south_america" }, { name: "Рио-де-Жанейро", lat: -22.9068, lon: -43.1729, region: "south_america" },
     { name: "Буэнос-Айрес", lat: -34.6037, lon: -58.3816, region: "south_america" }, { name: "Богота", lat: 4.7110, lon: -74.0721, region: "south_america" },
     { name: "Лима", lat: -12.0464, lon: -77.0428, region: "south_america" }, { name: "Сантьяго", lat: -33.4489, lon: -70.6693, region: "south_america" },
     { name: "Медельин", lat: 6.2442, lon: -75.5812, region: "south_america" }, { name: "Бразилиа", lat: -15.8267, lon: -47.9218, region: "south_america" },
-    { name: "Монтевидео", lat: -34.9011, lon: -56.1645, region: "south_america" }, { name: "Кито", lat: -0.1807, lon: -78.4678, region: "south_america" },
-    { name: "Каракас", lat: 10.4806, lon: -66.9036, region: "south_america" }, { name: "Белу-Оризонти", lat: -19.9167, lon: -43.9345, region: "south_america" },
-    { name: "Куритиба", lat: -25.4284, lon: -49.2733, region: "south_america" },
 
     // 🦁 АФРИКА
     { name: "Каир", lat: 30.0444, lon: 31.2357, region: "africa" }, { name: "Кейптаун", lat: -33.9249, lon: 18.4241, region: "africa" },
@@ -57,32 +52,19 @@ const CITIES = [
     { name: "Дурбан", lat: -29.8587, lon: 31.0218, region: "africa" }, { name: "Найроби", lat: -1.2921, lon: 36.8219, region: "africa" }, 
     { name: "Аккра", lat: 5.6037, lon: -0.1870, region: "africa" }, { name: "Лагос", lat: 6.5244, lon: 3.3792, region: "africa" }, 
     { name: "Дакар", lat: 14.7167, lon: -17.4677, region: "africa" }, { name: "Касабланка", lat: 33.5731, lon: -7.5898, region: "africa" },
-    { name: "Тунис", lat: 36.8065, lon: 10.1815, region: "africa" }, { name: "Алжир", lat: 36.7538, lon: 3.0588, region: "africa" },
-    { name: "Луанда", lat: -8.8390, lon: 13.2894, region: "africa" },
 
     // 🦘 АВСТРАЛИЯ И ОКЕАНИЯ
     { name: "Сидней", lat: -33.8688, lon: 151.2093, region: "oceania" }, { name: "Мельбурн", lat: -37.8136, lon: 144.9631, region: "oceania" }, 
     { name: "Окленд", lat: -36.8485, lon: 174.7633, region: "oceania" }, { name: "Брисбен", lat: -27.4705, lon: 153.0260, region: "oceania" }, 
-    { name: "Перт", lat: -31.9505, lon: 115.8605, region: "oceania" }, { name: "Аделаида", lat: -34.9285, lon: 138.6007, region: "oceania" }, 
-    { name: "Веллингтон", lat: -41.2865, lon: 174.7762, region: "oceania" }, { name: "Крайстчерч", lat: -43.5321, lon: 172.6362, region: "oceania" },
-    { name: "Голд-Кост", lat: -28.0167, lon: 153.4000, region: "oceania" }, { name: "Хобарт", lat: -42.8821, lon: 147.3272, region: "oceania" },
-    { name: "Дарвин", lat: -12.4634, lon: 130.8456, region: "oceania" }, { name: "Гамильтон", lat: -37.7870, lon: 175.2793, region: "oceania" }
+    { name: "Перт", lat: -31.9505, lon: 115.8605, region: "oceania" }, { name: "Аделаида", lat: -34.9285, lon: 138.6007, region: "oceania" }
 ];
 
-// Глобальные настройки игры
-let gameSettings = {
-    region: 'all',
-    time: 120 
-};
+let gameSettings = { region: 'all', time: 120 };
 
 async function getRandomImageId() {
     const cleanToken = myAccessToken.trim(); 
-    
-    // Фильтруем города по строгому региону
     let availableCities = CITIES;
-    if (gameSettings.region !== 'all') {
-        availableCities = CITIES.filter(c => c.region === gameSettings.region);
-    }
+    if (gameSettings.region !== 'all') availableCities = CITIES.filter(c => c.region === gameSettings.region);
 
     while (true) {
         const city = availableCities[Math.floor(Math.random() * availableCities.length)];
@@ -91,10 +73,8 @@ async function getRandomImageId() {
         const targetLat = city.lat + latOffset;
         const targetLon = city.lon + lonOffset;
 
-        const minLon = (targetLon - 0.03).toFixed(4);
-        const minLat = (targetLat - 0.03).toFixed(4);
-        const maxLon = (targetLon + 0.03).toFixed(4);
-        const maxLat = (targetLat + 0.03).toFixed(4);
+        const minLon = (targetLon - 0.03).toFixed(4); const minLat = (targetLat - 0.03).toFixed(4);
+        const maxLon = (targetLon + 0.03).toFixed(4); const maxLat = (targetLat + 0.03).toFixed(4);
 
         try {
             const url = `https://graph.mapillary.com/images?access_token=${cleanToken}&fields=id&bbox=${minLon},${minLat},${maxLon},${maxLat}&is_pano=true&limit=1`;
@@ -107,39 +87,31 @@ async function getRandomImageId() {
     }
 }
 
-// --- 2. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ---
+// --- 2. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ И РЕКОРДЫ ---
 const { Viewer } = mapillary;
 let viewer; let preloadedNextId = null; let timerInterval; let timeLeft = 120; 
 let currentRound = 1; const MAX_ROUNDS = 5; let totalScore = 0;
 
+// Читаем рекорды из памяти браузера (или ставим 0, если их еще нет)
+let bestTotalScore = localStorage.getItem('tima_best_total') || 0;
+let bestRoundScore = localStorage.getItem('tima_best_round') || 0;
+
 // --- 3. ЛОГИКА ТАЙМЕРА ---
 function updateTimerDisplay() {
     if (gameSettings.time === 0) return; 
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    document.getElementById('timer-display').innerText = 
-        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    const minutes = Math.floor(timeLeft / 60); const seconds = timeLeft % 60;
+    document.getElementById('timer-display').innerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
 function startTimer() {
     clearInterval(timerInterval); 
-    const timerDisplay = document.getElementById('timer-display');
-    timerDisplay.style.color = "white";
-
-    if (gameSettings.time === 0) {
-        timerDisplay.innerText = "∞";
-        return; 
-    }
-
-    timeLeft = gameSettings.time;
-    updateTimerDisplay();
+    const timerDisplay = document.getElementById('timer-display'); timerDisplay.style.color = "white";
+    if (gameSettings.time === 0) { timerDisplay.innerText = "∞"; return; }
+    timeLeft = gameSettings.time; updateTimerDisplay();
 
     timerInterval = setInterval(() => {
-        timeLeft--;
-        updateTimerDisplay();
-
+        timeLeft--; updateTimerDisplay();
         if (timeLeft <= 10) { timerDisplay.style.color = "#F44336"; }
-
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             if (playerMarker === null) { playerMarker = L.marker([20, 0]).addTo(map); }
@@ -147,29 +119,29 @@ function startTimer() {
         }
     }, 1000);
 }
-
 function stopTimer() { clearInterval(timerInterval); }
 
-// --- 4. МЕНЮ, НАСТРОЙКИ И УПРАВЛЕНИЕ ИГРОЙ ---
+// --- 4. МЕНЮ, МОДАЛКИ И УПРАВЛЕНИЕ ИГРОЙ ---
 async function preloadNext() { preloadedNextId = await getRandomImageId(); }
 preloadNext();
 
-document.getElementById('settings-btn').addEventListener('click', function() {
-    document.getElementById('settings-overlay').style.display = 'block';
+// Функция для закрытия любого окна по крестику
+window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; }
+
+document.getElementById('records-btn').addEventListener('click', function() {
+    // Обновляем цифры перед показом
+    document.getElementById('best-total-score').innerText = bestTotalScore;
+    document.getElementById('best-round-score').innerText = bestRoundScore;
+    document.getElementById('records-overlay').style.display = 'block';
 });
+document.getElementById('tutorial-btn').addEventListener('click', function() { document.getElementById('tutorial-overlay').style.display = 'block'; });
+document.getElementById('settings-btn').addEventListener('click', function() { document.getElementById('settings-overlay').style.display = 'block'; });
 
 document.getElementById('save-settings-btn').addEventListener('click', function() {
     const newRegion = document.getElementById('region-select').value;
     const newTime = parseInt(document.getElementById('timer-select').value);
-    
-    if (gameSettings.region !== newRegion) {
-        gameSettings.region = newRegion;
-        preloadedNextId = null;
-        preloadNext();
-    }
-    
-    gameSettings.time = newTime;
-    document.getElementById('settings-overlay').style.display = 'none';
+    if (gameSettings.region !== newRegion) { gameSettings.region = newRegion; preloadedNextId = null; preloadNext(); }
+    gameSettings.time = newTime; closeModal('settings-overlay');
 });
 
 function updateGameInfoUI() {
@@ -183,21 +155,16 @@ function resetGame() {
     if (playerMarker) { map.removeLayer(playerMarker); playerMarker = null; }
     if (answerMarker) { map.removeLayer(answerMarker); answerMarker = null; }
     if (answerLine) { map.removeLayer(answerLine); answerLine = null; }
-    map.setView([20, 0], 2);
-    document.getElementById('map-container').style.display = 'none'; document.getElementById('toggle-map-btn').innerText = '🗺️ Карта';
+    map.setView([20, 0], 2); document.getElementById('map-container').style.display = 'none'; document.getElementById('toggle-map-btn').innerText = '🗺️ Карта';
 }
 
 document.getElementById('start-game-btn').addEventListener('click', async function() {
-    this.innerText = "Загрузка... ⏳";
-    resetGame();
+    this.innerText = "Загрузка... ⏳"; resetGame();
     while (!preloadedNextId) { await new Promise(r => setTimeout(r, 100)); }
-
     document.getElementById('main-menu').style.display = 'none'; document.getElementById('game-info').style.display = 'flex'; 
     if (!viewer) { viewer = new Viewer({ accessToken: myAccessToken, container: 'pano-container', imageId: preloadedNextId }); } 
     else { viewer.moveTo(preloadedNextId); }
-    
-    preloadedNextId = null; preloadNext(); startTimer();
-    this.innerText = "▶️ Играть"; 
+    preloadedNextId = null; preloadNext(); startTimer(); this.innerText = "▶️ Играть"; 
 });
 
 // --- 5. НАСТРОЙКА КАРТЫ (LEAFLET) ---
@@ -207,8 +174,7 @@ let playerMarker = null; let answerMarker = null; let answerLine = null;
 
 map.on('click', function(e) {
     if (document.getElementById('result-overlay').style.display === 'block' || document.getElementById('final-overlay').style.display === 'block') return;
-    if (playerMarker === null) { playerMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map); } 
-    else { playerMarker.setLatLng([e.latlng.lat, e.latlng.lng]); }
+    if (playerMarker === null) { playerMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map); } else { playerMarker.setLatLng([e.latlng.lat, e.latlng.lng]); }
 });
 
 const mapContainer = document.getElementById('map-container');
@@ -232,7 +198,6 @@ document.getElementById('guess-btn').addEventListener('click', async function() 
 
     const currentImage = await viewer.getImage();
     const realLat = currentImage.lngLat.lat; const realLng = currentImage.lngLat.lng;
-    
     const playerLatLng = playerMarker.getLatLng().wrap(); 
     const playerLat = playerLatLng.lat; const playerLng = playerLatLng.lng;
 
@@ -240,13 +205,18 @@ document.getElementById('guess-btn').addEventListener('click', async function() 
     let score = 5000 * Math.pow(0.998, distance); 
     score = distance < 0.1 ? 5000 : Math.max(0, Math.round(score));
 
+    // ПРОБИВАЕМ РЕКОРД ЗА 1 РАУНД!
+    if (score > bestRoundScore) {
+        bestRoundScore = score;
+        localStorage.setItem('tima_best_round', bestRoundScore);
+    }
+
     totalScore += score; updateGameInfoUI();
     answerMarker = L.marker([realLat, realLng]).addTo(map).bindPopup("Правильный ответ").openPopup();
     answerLine = L.polyline([[playerLat, playerLng], [realLat, realLng]], {color: 'red', weight: 4}).addTo(map);
     map.fitBounds([[playerLat, playerLng], [realLat, realLng]], { padding: [30, 30] });
     
-    document.getElementById('result-distance').innerText = `Отклонение: ${distance} км`;
-    document.getElementById('result-score').innerText = `+${score}`;
+    document.getElementById('result-distance').innerText = `Отклонение: ${distance} км`; document.getElementById('result-score').innerText = `+${score}`;
     const titleElement = document.getElementById('result-title');
     
     if (distance <= 300) { titleElement.innerText = "Идеальное попадание! 🎯"; titleElement.style.color = "#4CAF50"; confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } }); } 
@@ -264,19 +234,27 @@ document.getElementById('next-btn').addEventListener('click', async function() {
     document.getElementById('result-overlay').style.display = 'none';
     if (currentRound >= MAX_ROUNDS) {
         document.getElementById('final-score').innerText = totalScore;
+        
+        // ПРОБИВАЕМ РЕКОРД ЗА ИГРУ (5 РАУНДОВ)!
+        const recordMsg = document.getElementById('new-record-msg');
+        if (totalScore > bestTotalScore) {
+            bestTotalScore = totalScore;
+            localStorage.setItem('tima_best_total', bestTotalScore);
+            recordMsg.style.display = 'block'; // Показываем надпись "НОВЫЙ РЕКОРД!"
+        } else {
+            recordMsg.style.display = 'none';
+        }
+
         document.getElementById('final-overlay').style.display = 'block';
         confetti({ particleCount: 300, spread: 160, origin: { y: 0.3 } }); 
     } else {
         this.innerText = 'Загрузка... ⏳'; currentRound++; updateGameInfoUI();
-        if (preloadedNextId) { viewer.moveTo(preloadedNextId); } 
-        else { const newId = await getRandomImageId(); viewer.moveTo(newId); }
+        if (preloadedNextId) { viewer.moveTo(preloadedNextId); } else { const newId = await getRandomImageId(); viewer.moveTo(newId); }
         preloadedNextId = null; preloadNext();
         if (playerMarker) { map.removeLayer(playerMarker); playerMarker = null; }
         if (answerMarker) { map.removeLayer(answerMarker); answerMarker = null; }
         if (answerLine) { map.removeLayer(answerLine); answerLine = null; }
-        map.setView([20, 0], 2);
-        document.getElementById('guess-btn').style.display = 'block';
-        startTimer();
+        map.setView([20, 0], 2); document.getElementById('guess-btn').style.display = 'block'; startTimer();
     }
 });
 
