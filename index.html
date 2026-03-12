@@ -16,7 +16,24 @@
         
         #pano-container { height: 100vh; width: 100%; background: #111; position: relative; }
 
-        /* --- ГЛАВНОЕ МЕНЮ --- */
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimaGuesser</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.css" rel="stylesheet" />
+    
+    <script src="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif; overflow: hidden; }
+        #pano-container { height: 100vh; width: 100%; background: #111; position: relative; }
+
+        /* ГЛАВНОЕ МЕНЮ */
         #main-menu {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
@@ -34,17 +51,19 @@
         #settings-btn { background-color: #607D8B; }
         #settings-btn:hover { background-color: #455A64; transform: scale(1.05); }
 
-        /* --- ТАЙМЕР --- */
-        #timer-display {
+        /* ИГРОВАЯ ИНФОРМАЦИЯ (ТАЙМЕР И РАУНД) */
+        #game-info {
             position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(0,0,0,0.8); color: white; font-size: 32px; font-weight: bold;
-            padding: 10px 30px; border-radius: 10px; z-index: 1000; border: 2px solid white;
-            display: none; /* Скрыт в меню */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            transition: color 0.3s;
+            display: flex; gap: 20px; z-index: 1000; display: none; /* Скрыто в меню */
         }
+        .info-box {
+            background: rgba(0,0,0,0.8); color: white; font-size: 24px; font-weight: bold;
+            padding: 10px 20px; border-radius: 10px; border: 2px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); text-align: center;
+        }
+        #timer-display { transition: color 0.3s; min-width: 80px; }
 
-        /* --- ИГРОВОЙ ИНТЕРФЕЙС --- */
+        /* ИГРОВОЙ ИНТЕРФЕЙС (КАРТА И КНОПКИ) */
         .controls { position: absolute; bottom: 20px; right: 20px; z-index: 1000; display: flex; gap: 10px; }
         button.game-btn { padding: 10px 20px; font-size: 16px; cursor: pointer; color: white; border: none; border-radius: 5px; font-weight: bold; transition: 0.2s; }
         #toggle-map-btn { background-color: #2196F3; }
@@ -57,42 +76,59 @@
             background: #eee; z-index: 1000; border: 3px solid white; border-radius: 8px; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        #result-overlay {
+        /* ОКНО РЕЗУЛЬТАТОВ РАУНДА */
+        .overlay-card {
             display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(30, 30, 30, 0.95);
             color: white; padding: 40px; border-radius: 15px; text-align: center; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-            border: 2px solid #555; min-width: 300px;
+            border: 2px solid #555; min-width: 350px;
         }
-        #result-title { margin-top: 0; color: #4CAF50; font-size: 28px; }
-        .score-text { font-size: 48px; font-weight: bold; margin: 20px 0; color: #FFF; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        .distance-text { font-size: 20px; color: #FF9800; margin-bottom: 30px; }
-        #next-btn { background-color: #FF9800; width: 100%; font-size: 18px; padding: 15px; border: none; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        #next-btn:hover { background-color: #F57C00; }
+        .result-title { margin-top: 0; font-size: 28px; }
+        .score-text { font-size: 48px; font-weight: bold; margin: 10px 0; color: #FFF; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .distance-text { font-size: 20px; color: #FF9800; margin-bottom: 20px; }
+        .action-btn { background-color: #FF9800; width: 100%; font-size: 18px; padding: 15px; border: none; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 15px; }
+        .action-btn:hover { background-color: #F57C00; }
+        
+        /* КНОПКА ВОЗВРАТА В МЕНЮ */
+        #home-btn { background-color: #2196F3; }
+        #home-btn:hover { background-color: #1976D2; }
     </style>
 </head>
 <body>
 
     <div id="main-menu">
-        <h1>🌍 Мой Геогессер</h1>
+        <h1>🌍 TimaGuesser</h1>
         <button id="start-game-btn" class="menu-btn">▶️ Играть</button>
         <button id="settings-btn" class="menu-btn">⚙️ Настройки</button>
     </div>
 
-    <div id="timer-display">02:00</div>
+    <div id="game-info">
+        <div class="info-box" id="round-display">Раунд 1 / 5</div>
+        <div class="info-box" id="total-score-display">Очки: 0</div>
+        <div class="info-box" id="timer-display">02:00</div>
+    </div>
 
     <div id="pano-container">
         <div class="controls">
             <button id="toggle-map-btn" class="game-btn">🗺️ Карта</button>
             <button id="guess-btn" class="game-btn">Угадать!</button>
         </div>
-        
         <div id="map-container"></div>
 
-        <div id="result-overlay">
-            <h2 id="result-title">Результат</h2>
+        <div id="result-overlay" class="overlay-card">
+            <h2 id="result-title" class="result-title">Результат</h2>
             <div class="distance-text" id="result-distance">Расстояние: 0 км</div>
-            <div class="score-text" id="result-score">0</div>
-            <p style="margin-top:-15px; margin-bottom: 25px; color: #aaa;">очков из 5000</p>
-            <button id="next-btn">Следующий раунд ➡️</button>
+            <div class="score-text" id="result-score">+0</div>
+            <p style="margin-top:-5px; margin-bottom: 10px; color: #aaa;">очков получено</p>
+            <button id="next-btn" class="action-btn">Следующий раунд ➡️</button>
+        </div>
+
+        <div id="final-overlay" class="overlay-card">
+            <h2 class="result-title" style="color: #4CAF50;">Игра окончена! 🏆</h2>
+            <p style="font-size: 20px; color: #aaa; margin-bottom: 5px;">Твой итоговый счет:</p>
+            <div class="score-text" id="final-score">0</div>
+            <p style="margin-top:-5px; margin-bottom: 25px; color: #aaa;">из 25000 возможных</p>
+            <button id="play-again-btn" class="action-btn">🔄 Сыграть еще раз</button>
+            <button id="home-btn" class="action-btn">🏠 В главное меню</button>
         </div>
     </div>
 
@@ -100,4 +136,8 @@
     <script src="script.js"></script>
     
 </body>
+</html>rc="script.js"></script>
+    
+</body>
+
 </html>
