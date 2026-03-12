@@ -3,24 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мой Геогессер</title>
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link href="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.css" rel="stylesheet" />
-    
-    <script src="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <style>
-        body, html { margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif; overflow: hidden; }
-        
-        #pano-container { height: 100vh; width: 100%; background: #111; position: relative; }
-
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TimaGuesser</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -33,7 +15,6 @@
         body, html { margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif; overflow: hidden; }
         #pano-container { height: 100vh; width: 100%; background: #111; position: relative; }
 
-        /* ГЛАВНОЕ МЕНЮ */
         #main-menu {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
@@ -51,10 +32,9 @@
         #settings-btn { background-color: #607D8B; }
         #settings-btn:hover { background-color: #455A64; transform: scale(1.05); }
 
-        /* ИГРОВАЯ ИНФОРМАЦИЯ (ТАЙМЕР И РАУНД) */
         #game-info {
             position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 20px; z-index: 1000; display: none; /* Скрыто в меню */
+            display: flex; gap: 20px; z-index: 1000; display: none; 
         }
         .info-box {
             background: rgba(0,0,0,0.8); color: white; font-size: 24px; font-weight: bold;
@@ -63,7 +43,6 @@
         }
         #timer-display { transition: color 0.3s; min-width: 80px; }
 
-        /* ИГРОВОЙ ИНТЕРФЕЙС (КАРТА И КНОПКИ) */
         .controls { position: absolute; bottom: 20px; right: 20px; z-index: 1000; display: flex; gap: 10px; }
         button.game-btn { padding: 10px 20px; font-size: 16px; cursor: pointer; color: white; border: none; border-radius: 5px; font-weight: bold; transition: 0.2s; }
         #toggle-map-btn { background-color: #2196F3; }
@@ -76,7 +55,6 @@
             background: #eee; z-index: 1000; border: 3px solid white; border-radius: 8px; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        /* ОКНО РЕЗУЛЬТАТОВ РАУНДА */
         .overlay-card {
             display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(30, 30, 30, 0.95);
             color: white; padding: 40px; border-radius: 15px; text-align: center; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
@@ -88,9 +66,12 @@
         .action-btn { background-color: #FF9800; width: 100%; font-size: 18px; padding: 15px; border: none; color: white; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 15px; }
         .action-btn:hover { background-color: #F57C00; }
         
-        /* КНОПКА ВОЗВРАТА В МЕНЮ */
         #home-btn { background-color: #2196F3; }
         #home-btn:hover { background-color: #1976D2; }
+
+        /* СТИЛИ ДЛЯ ИНПУТОВ НАСТРОЕК */
+        .settings-label { display: block; text-align: left; margin-top: 20px; font-size: 18px; color: #aaa; }
+        .settings-select { width: 100%; padding: 12px; margin-top: 8px; font-size: 16px; background: #333; color: white; border: 1px solid #555; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -99,6 +80,30 @@
         <h1>🌍 TimaGuesser</h1>
         <button id="start-game-btn" class="menu-btn">▶️ Играть</button>
         <button id="settings-btn" class="menu-btn">⚙️ Настройки</button>
+    </div>
+
+    <div id="settings-overlay" class="overlay-card" style="z-index: 4000;">
+        <h2 class="result-title">⚙️ Настройки</h2>
+        
+        <label class="settings-label">Регион поиска:</label>
+        <select id="region-select" class="settings-select">
+            <option value="all">🌍 Весь мир</option>
+            <option value="europe">🏰 Европа и СНГ</option>
+            <option value="asia">🏮 Азия и Ближний Восток</option>
+            <option value="americas">🌎 Америка (Северная и Южная)</option>
+            <option value="africa">🦁 Африка и Океания</option>
+        </select>
+        
+        <label class="settings-label">Время на раунд:</label>
+        <select id="timer-select" class="settings-select">
+            <option value="30">30 секунд (Хардкор)</option>
+            <option value="60">1 минута</option>
+            <option value="120" selected>2 минуты (Стандарт)</option>
+            <option value="300">5 минут</option>
+            <option value="0">Без времени (Релакс)</option>
+        </select>
+
+        <button id="save-settings-btn" class="action-btn" style="background-color: #4CAF50; margin-top: 30px;">💾 Сохранить и закрыть</button>
     </div>
 
     <div id="game-info">
@@ -136,8 +141,4 @@
     <script src="script.js"></script>
     
 </body>
-</html>rc="script.js"></script>
-    
-</body>
-
 </html>
